@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+// Components
+import Button from "./components/Button";
+
 // Bootstrap CSS
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 // Custom CSS
@@ -11,14 +14,21 @@ function App() {
     // Articles Array
     const [articles, setArticles] = useState([]);
     // Form Data
-    let titleForm = "";
+    const [titleForm, setTitleForm] = useState("");
 
     // On Form Submit
     function handleFormSubmit(e) {
         e.preventDefault();
 
-        // Check if input is correct
-        if (titleForm === "" || articles.includes(titleForm)) return;
+        // Check if input is not empty
+        if (titleForm === "") return;
+
+        // Check if the text doesn't already exist
+        let alreadyExist = false;
+        articles.map(
+            (element) => element.title === titleForm && (alreadyExist = true)
+        );
+        if (alreadyExist) return;
 
         // Add the new Article
         const newArticles = [...articles];
@@ -37,6 +47,12 @@ function App() {
         return id;
     }
 
+    // Delete an element from an array
+    function deleteReactiveElementById(array, setFz, id) {
+        let newArray = [...array];
+        setFz(newArray.filter((element) => element.id !== id));
+    }
+
     return (
         <>
             <main className="d-flex flex-column align-items-center mt-5">
@@ -50,7 +66,7 @@ function App() {
 
                         <input
                             type="text"
-                            onChange={(e) => (titleForm = e.target.value)}
+                            onChange={(e) => setTitleForm(e.target.value)}
                             className="form-control"
                             id="inputTitle"
                         />
@@ -69,7 +85,23 @@ function App() {
                     {articles?.length ? (
                         // Print the Array
                         articles.map((article) => (
-                            <li key={article.id}>{article.title}</li>
+                            <li key={article.id}>
+                                {/* Nome dell'articolo */}
+                                {article.title}
+
+                                {/* Pulsante Elimina */}
+                                <Button
+                                    key={"del-" + article.id}
+                                    text={"🧺"}
+                                    handleStatusChange={() =>
+                                        deleteReactiveElementById(
+                                            articles,
+                                            setArticles,
+                                            article.id
+                                        )
+                                    }
+                                />
+                            </li>
                         ))
                     ) : (
                         // Print Empty Array Message
