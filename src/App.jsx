@@ -16,6 +16,8 @@ function App() {
 
     // Form Data
     const [titleForm, setTitleForm] = useState("");
+    const [authorForm, setAuthorForm] = useState("");
+    const [statusForm, setStatusForm] = useState("");
 
     // Warning text placed at the top of the page
     const [warningText, setWarningText] = useState("");
@@ -28,14 +30,20 @@ function App() {
         e.preventDefault();
 
         // Check if input is not empty
-        if (titleForm === "") return;
+        if (titleForm === "" || authorForm === "" || statusForm === "") {
+            setWarningText("\nRiempire tutte le caselle!");
+            return;
+        }
 
         // Check if the text doesn't already exist
         let alreadyExist = false;
-        articles.map(
-            (element) => element.title === titleForm && (alreadyExist = true)
-        );
-        if (alreadyExist) return;
+        articles.map((element) => {
+            element.title === titleForm && (alreadyExist = true);
+        });
+        if (alreadyExist) {
+            setWarningText("\nQuesto titolo esiste già");
+            return;
+        }
 
         // Check if an element is being edited
         if (isEditing !== undefined) {
@@ -48,8 +56,11 @@ function App() {
 
             // change the index
             newArticles[indexToChange] = {
-                title: titleForm,
                 id: newArticles[indexToChange].id,
+                title: titleForm,
+                author: authorForm,
+                status: statusForm,
+                isBeingEdited: false,
             };
 
             setArticles(newArticles);
@@ -60,7 +71,13 @@ function App() {
 
         // Add the new Article
         const newArticles = [...articles];
-        newArticles.push({ title: titleForm, id: getLastId(articles) });
+        newArticles.push({
+            id: getLastId(articles),
+            title: titleForm,
+            author: authorForm,
+            status: statusForm,
+            isBeingEdited: false,
+        });
         setArticles(newArticles);
     }
 
@@ -107,6 +124,34 @@ function App() {
                             />
                         </div>
 
+                        {/* Author Input */}
+                        <div className="col-12">
+                            <label htmlFor="inputAuthor" className="form-label">
+                                Autore articolo:
+                            </label>
+
+                            <input
+                                type="text"
+                                onChange={(e) => setAuthorForm(e.target.value)}
+                                className="form-control"
+                                id="inputAuthor"
+                            />
+                        </div>
+
+                        {/* Status Input */}
+                        <div className="col-12">
+                            <label htmlFor="inputStatus" className="form-label">
+                                Stato articolo:
+                            </label>
+
+                            <input
+                                type="text"
+                                onChange={(e) => setStatusForm(e.target.value)}
+                                className="form-control"
+                                id="inputStatus"
+                            />
+                        </div>
+
                         {/* Submit Button */}
                         <div className="col-12">
                             <button type="submit" className="btn btn-primary">
@@ -122,11 +167,26 @@ function App() {
                             articles.map((article) => (
                                 <li
                                     key={article.id}
-                                    className="d-flex justify-content-between align-items-center py-2 px-1"
+                                    className={
+                                        "d-flex justify-content-between align-items-center py-2 px-3" +
+                                        (article.isBeingEdited === true &&
+                                            " bg-secondary")
+                                    }
                                 >
-                                    {/* Nome dell'articolo */}
-                                    {article.title}
+                                    {/* Article Details */}
+                                    <div>
+                                        <p className="m-0 mb-1">
+                                            <b>{"Titolo:"}</b> {article.title}
+                                        </p>
+                                        <p className="m-0 mb-1">
+                                            <b>{"Autore:"}</b> {article.author}
+                                        </p>
+                                        <p className="m-0">
+                                            <b>{"Stato:"}</b> {article.status}
+                                        </p>
+                                    </div>
 
+                                    {/* Utility Buttons */}
                                     <div>
                                         {/* Pulsante Modifica */}
                                         <Button
@@ -139,7 +199,7 @@ function App() {
                                                         article.title +
                                                         '"'
                                                 );
-                                                console.log(isEditing);
+                                                article.isBeingEdited = true;
                                             }}
                                         />
 
