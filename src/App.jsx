@@ -56,58 +56,64 @@ function App() {
     return (
         <>
             <main className="d-flex flex-column align-items-center mt-5">
-                {/* FORM */}
-                <form onSubmit={handleFormSubmit} className="row g-3 w-50">
-                    {/* Title Input */}
-                    <div className="col-12">
-                        <label htmlFor="inputTitle" className="form-label">
-                            Titolo articolo:
-                        </label>
+                {/* Container */}
+                <div className="w-50">
+                    {/* FORM */}
+                    <form onSubmit={handleFormSubmit} className="row g-3">
+                        {/* Title Input */}
+                        <div className="col-12">
+                            <label htmlFor="inputTitle" className="form-label">
+                                Titolo articolo:
+                            </label>
 
-                        <input
-                            type="text"
-                            onChange={(e) => setTitleForm(e.target.value)}
-                            className="form-control"
-                            id="inputTitle"
-                        />
-                    </div>
+                            <input
+                                type="text"
+                                onChange={(e) => setTitleForm(e.target.value)}
+                                className="form-control"
+                                id="inputTitle"
+                            />
+                        </div>
 
-                    {/* Submit Button */}
-                    <div className="col-12">
-                        <button type="submit" className="btn btn-primary">
-                            Invio
-                        </button>
-                    </div>
-                </form>
+                        {/* Submit Button */}
+                        <div className="col-12">
+                            <button type="submit" className="btn btn-primary">
+                                Invio
+                            </button>
+                        </div>
+                    </form>
 
-                {/* ARTICLES LIST */}
-                <ul className="mt-5">
-                    {articles?.length ? (
-                        // Print the Array
-                        articles.map((article) => (
-                            <li key={article.id}>
-                                {/* Nome dell'articolo */}
-                                {article.title}
+                    {/* ARTICLES LIST */}
+                    <ul className="mt-5">
+                        {articles?.length ? (
+                            // Print the Array
+                            articles.map((article) => (
+                                <li
+                                    key={article.id}
+                                    className="d-flex justify-content-between align-items-center py-2 px-1"
+                                >
+                                    {/* Nome dell'articolo */}
+                                    {article.title}
 
-                                {/* Pulsante Elimina */}
-                                <Button
-                                    key={"del-" + article.id}
-                                    text={"🧺"}
-                                    handleStatusChange={() =>
-                                        deleteReactiveElementById(
-                                            articles,
-                                            setArticles,
-                                            article.id
-                                        )
-                                    }
-                                />
-                            </li>
-                        ))
-                    ) : (
-                        // Print Empty Array Message
-                        <h2>Ancora nessun post...</h2>
-                    )}
-                </ul>
+                                    {/* Pulsante Elimina */}
+                                    <Button
+                                        key={"del-" + article.id}
+                                        text={"🧺"}
+                                        handleStatusChange={() =>
+                                            deleteReactiveElementById(
+                                                articles,
+                                                setArticles,
+                                                article.id
+                                            )
+                                        }
+                                    />
+                                </li>
+                            ))
+                        ) : (
+                            // Print Empty Array Message
+                            <h2>Ancora nessun post...</h2>
+                        )}
+                    </ul>
+                </div>
             </main>
         </>
     );
