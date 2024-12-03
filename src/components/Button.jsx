@@ -1,3 +1,7 @@
 export default function ({ text, handleStatusChange }) {
-    return <button onClick={handleStatusChange}>{text}</button>;
+    return (
+        <button className="mx-1" onClick={handleStatusChange}>
+            {text}
+        </button>
+    );
 }

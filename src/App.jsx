@@ -13,8 +13,15 @@ function App() {
 
     // Articles Array
     const [articles, setArticles] = useState([]);
+
     // Form Data
     const [titleForm, setTitleForm] = useState("");
+
+    // Warning text placed at the top of the page
+    const [warningText, setWarningText] = useState("");
+
+    // Variables
+    const [isEditing, setIsEditing] = useState(undefined); // Warn that im EDITING an element and not ADDING a new one
 
     // On Form Submit
     function handleFormSubmit(e) {
@@ -29,6 +36,27 @@ function App() {
             (element) => element.title === titleForm && (alreadyExist = true)
         );
         if (alreadyExist) return;
+
+        // Check if an element is being edited
+        if (isEditing !== undefined) {
+            const newArticles = [...articles];
+
+            // find the index to change
+            const indexToChange = newArticles.findIndex(
+                (element) => element.id === isEditing
+            );
+
+            // change the index
+            newArticles[indexToChange] = {
+                title: titleForm,
+                id: newArticles[indexToChange].id,
+            };
+
+            setArticles(newArticles);
+            setIsEditing(undefined);
+            setWarningText("");
+            return;
+        }
 
         // Add the new Article
         const newArticles = [...articles];
@@ -58,6 +86,11 @@ function App() {
             <main className="d-flex flex-column align-items-center mt-5">
                 {/* Container */}
                 <div className="w-50">
+                    {/* WARNING TEXT (Default: empty) */}
+                    <h1 className="underline-red text-center mb-3">
+                        {warningText}
+                    </h1>
+
                     {/* FORM */}
                     <form onSubmit={handleFormSubmit} className="row g-3">
                         {/* Title Input */}
@@ -94,18 +127,35 @@ function App() {
                                     {/* Nome dell'articolo */}
                                     {article.title}
 
-                                    {/* Pulsante Elimina */}
-                                    <Button
-                                        key={"del-" + article.id}
-                                        text={"🧺"}
-                                        handleStatusChange={() =>
-                                            deleteReactiveElementById(
-                                                articles,
-                                                setArticles,
-                                                article.id
-                                            )
-                                        }
-                                    />
+                                    <div>
+                                        {/* Pulsante Modifica */}
+                                        <Button
+                                            key={"mod-" + article.id}
+                                            text={"✏"}
+                                            handleStatusChange={() => {
+                                                setIsEditing(article.id);
+                                                setWarningText(
+                                                    "Modifica dell'elemento \"" +
+                                                        article.title +
+                                                        '"'
+                                                );
+                                                console.log(isEditing);
+                                            }}
+                                        />
+
+                                        {/* Pulsante Elimina */}
+                                        <Button
+                                            key={"del-" + article.id}
+                                            text={"🧺"}
+                                            handleStatusChange={() =>
+                                                deleteReactiveElementById(
+                                                    articles,
+                                                    setArticles,
+                                                    article.id
+                                                )
+                                            }
+                                        />
+                                    </div>
                                 </li>
                             ))
                         ) : (

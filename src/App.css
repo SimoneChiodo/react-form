@@ -13,3 +13,7 @@ li {
 li:last-child {
     border-bottom: none;
 }
+
+.underline-red {
+    text-decoration: underline red;
+}
