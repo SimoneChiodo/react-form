@@ -1,8 +1,10 @@
-# React + Vite
+# Esercizio Blog Form
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descrizione
 
-Currently, two official plugins are available:
+Il progetto consiste nella creazione di un semplice form che permette di inserire il titolo di un articolo di blog. Al submit, l’articolo viene aggiunto a una lista visualizzata sotto il form. Ogni elemento della lista può essere rimosso tramite un’apposita icona.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Bonus
+
+- Possibilità di modificare il titolo di un articolo già inserito.
+- Aggiunta di ulteriori campi al form, come lo stato dell’articolo (es. *draft* o *published*) e l’autore.
